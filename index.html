@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #video {
+            width: 320px;
+            height: 240px;
+            border: 1px solid black;
+        }
+
+        #capture {
+            margin-top: 10px;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        #drop_zone {
+            width: 320px;
+            height: 50px;
+            border: 2px dashed #ccc;
+            line-height: 50px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #image {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="drop_zone">ここにファイルをドロップ、またはクリックしてファイルを選択</div>
+    <video id="video" controls>
+        <source src="" type="video/mp4">
+        お使いのブラウザはvideoタグをサポートしていません。
+    </video>
+    <button id="capture">キャプチャ</button>
+    <canvas id="canvas"></canvas>
+    <img id="image" />
+
+    <script>
+document.getElementById('capture').addEventListener('click', function() {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    canvas.width = video.videoWidth; // ビデオの幅に合わせる
+    canvas.height = video.videoHeight; // ビデオの高さに合わせる
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const image = document.getElementById('image');
+    image.src = canvas.toDataURL('image/png');
+    image.style.display = 'block';
+
+    // ダウンロードする場合
+    const a = document.createElement('a');
+    a.href = image.src;
+    a.download = 'capture.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
+
+const dropZone = document.getElementById('drop_zone');
+dropZone.addEventListener('dragover', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+});
+
+dropZone.addEventListener('drop', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        const file = files[0];
+        const url = URL.createObjectURL(file);
+        const video = document.getElementById('video');
+        video.src = url;
+        video.load();
+    }
+});
+
+dropZone.addEventListener('click', function() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'video/*';
+    fileInput.onchange = function(e) {
+        const file = e.target.files[0];
+        const url = URL.createObjectURL(file);
+        const video = document.getElementById('video');
+        video.src = url;
+        video.load();
+    }
+    fileInput.click();
+});
+    </script>
+
+</body>
+</html>
