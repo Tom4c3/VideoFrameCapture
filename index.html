@@ -52,27 +52,33 @@
     <script>
         document.getElementById('capture').addEventListener('click', function () {
             const video = document.getElementById('video');
-            const canvas = document.getElementById('canvas');
-            canvas.width = video.videoWidth; // ビデオの幅に合わせる
-            canvas.height = video.videoHeight; // ビデオの高さに合わせる
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            const image = document.getElementById('image');
-            image.src = canvas.toDataURL('image/png');
-            image.style.display = 'block';
+            // ビデオが準備完了しているかどうかを確認する
+            if (video.readyState === 4) {
+                const canvas = document.getElementById('canvas');
+                canvas.width = video.videoWidth; // ビデオの幅に合わせる
+                canvas.height = video.videoHeight; // ビデオの高さに合わせる
+                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // イメージの元のサイズを表示
-            const dimensions = document.getElementById('dimensions');
-            dimensions.textContent = `元のサイズ: ${canvas.width} x ${canvas.height}px`;
+                const image = document.getElementById('image');
+                image.src = canvas.toDataURL('image/png');
+                image.style.display = 'block';
 
-            // ダウンロードする場合
-            const a = document.createElement('a');
-            a.href = image.src;
-            const filename = document.getElementById('filename').value;
-            a.download = filename ? filename : 'capture.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+                // イメージの元のサイズを表示
+                const dimensions = document.getElementById('dimensions');
+                dimensions.textContent = `元のサイズ: ${canvas.width} x ${canvas.height}px`;
+
+                // ダウンロードする場合
+                const a = document.createElement('a');
+                a.href = image.src;
+                const filename = document.getElementById('filename').value;
+                a.download = filename ? filename : 'capture.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                alert('先にビデオを選択してください。');
+            }
         });
 
         const dropZone = document.getElementById('drop_zone');
