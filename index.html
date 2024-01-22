@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8"> <!-- 文字化けを防ぐためにUTF-8エンコーディングを追加 -->
     <link rel="icon" href="https://raw.githubusercontent.com/Tom4c3/simple-text-replacer/main/T2favicon.ico" type="image/x-icon">
+    <title>VideoFrameCapture</title>
 
     <style>
         #video {
@@ -15,10 +16,6 @@
             margin-top: 10px;
         }
 
-        #canvas {
-            display: none;
-        }
-
         #drop_zone {
             width: 320px;
             height: 50px;
@@ -29,6 +26,12 @@
         }
 
         #image {
+            max-width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        #canvas {
             display: none;
         }
     </style>
@@ -41,63 +44,70 @@
         お使いのブラウザはvideoタグをサポートしていません。
     </video>
     <button id="capture">キャプチャ</button>
+    <input type="text" id="filename" placeholder="ファイル名を入力" value="capture.png">
     <canvas id="canvas"></canvas>
+    <p id="dimensions"></p>
     <img id="image" />
 
     <script>
-document.getElementById('capture').addEventListener('click', function() {
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    canvas.width = video.videoWidth; // ビデオの幅に合わせる
-    canvas.height = video.videoHeight; // ビデオの高さに合わせる
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        document.getElementById('capture').addEventListener('click', function () {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth; // ビデオの幅に合わせる
+            canvas.height = video.videoHeight; // ビデオの高さに合わせる
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    const image = document.getElementById('image');
-    image.src = canvas.toDataURL('image/png');
-    image.style.display = 'block';
+            const image = document.getElementById('image');
+            image.src = canvas.toDataURL('image/png');
+            image.style.display = 'block';
 
-    // ダウンロードする場合
-    const a = document.createElement('a');
-    a.href = image.src;
-    a.download = 'capture.png';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-});
+            // イメージの元のサイズを表示
+            const dimensions = document.getElementById('dimensions');
+            dimensions.textContent = `元のサイズ: ${canvas.width} x ${canvas.height}px`;
 
-const dropZone = document.getElementById('drop_zone');
-dropZone.addEventListener('dragover', function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-});
+            // ダウンロードする場合
+            const a = document.createElement('a');
+            a.href = image.src;
+            const filename = document.getElementById('filename').value;
+            a.download = filename ? filename : 'capture.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
 
-dropZone.addEventListener('drop', function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-        const file = files[0];
-        const url = URL.createObjectURL(file);
-        const video = document.getElementById('video');
-        video.src = url;
-        video.load();
-    }
-});
+        const dropZone = document.getElementById('drop_zone');
+        dropZone.addEventListener('dragover', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        });
 
-dropZone.addEventListener('click', function() {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'video/*';
-    fileInput.onchange = function(e) {
-        const file = e.target.files[0];
-        const url = URL.createObjectURL(file);
-        const video = document.getElementById('video');
-        video.src = url;
-        video.load();
-    }
-    fileInput.click();
-});
+        dropZone.addEventListener('drop', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                const url = URL.createObjectURL(file);
+                const video = document.getElementById('video');
+                video.src = url;
+                video.load();
+            }
+        });
+
+        dropZone.addEventListener('click', function () {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'video/*, .mkv'; // .mkvファイルも選択可能にする
+            fileInput.onchange = function (e) {
+                const file = e.target.files[0];
+                const url = URL.createObjectURL(file);
+                const video = document.getElementById('video');
+                video.src = url;
+                video.load();
+            }
+            fileInput.click();
+        });
     </script>
 
 </body>
