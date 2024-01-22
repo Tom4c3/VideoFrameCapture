@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8"> <!-- •¶š‰»‚¯‚ğ–h‚®‚½‚ß‚ÉUTF-8ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğ’Ç‰Á -->
+    <meta charset="UTF-8"> <!-- æ–‡å­—åŒ–ã‘ã‚’é˜²ããŸã‚ã«UTF-8ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’è¿½åŠ  -->
     <link rel="icon" href="https://raw.githubusercontent.com/Tom4c3/simple-text-replacer/main/T2favicon.ico" type="image/x-icon">
 
     <style>
@@ -35,12 +35,12 @@
 </head>
 <body>
 
-    <div id="drop_zone">‚±‚±‚Éƒtƒ@ƒCƒ‹‚ğƒhƒƒbƒvA‚Ü‚½‚ÍƒNƒŠƒbƒN‚µ‚Äƒtƒ@ƒCƒ‹‚ğ‘I‘ğ</div>
+    <div id="drop_zone">ã“ã“ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ‰ãƒ­ãƒƒãƒ—ã€ã¾ãŸã¯ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ</div>
     <video id="video" controls>
         <source src="" type="video/mp4">
-        ‚¨g‚¢‚Ìƒuƒ‰ƒEƒU‚Ívideoƒ^ƒO‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚Ü‚¹‚ñB
+        ãŠä½¿ã„ã®ãƒ–ãƒ©ã‚¦ã‚¶ã¯videoã‚¿ã‚°ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã›ã‚“ã€‚
     </video>
-    <button id="capture">ƒLƒƒƒvƒ`ƒƒ</button>
+    <button id="capture">ã‚­ãƒ£ãƒ—ãƒãƒ£</button>
     <canvas id="canvas"></canvas>
     <img id="image" />
 
@@ -48,15 +48,15 @@
 document.getElementById('capture').addEventListener('click', function() {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    canvas.width = video.videoWidth; // ƒrƒfƒI‚Ì•‚É‡‚í‚¹‚é
-    canvas.height = video.videoHeight; // ƒrƒfƒI‚Ì‚‚³‚É‡‚í‚¹‚é
+    canvas.width = video.videoWidth; // ãƒ“ãƒ‡ã‚ªã®å¹…ã«åˆã‚ã›ã‚‹
+    canvas.height = video.videoHeight; // ãƒ“ãƒ‡ã‚ªã®é«˜ã•ã«åˆã‚ã›ã‚‹
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const image = document.getElementById('image');
     image.src = canvas.toDataURL('image/png');
     image.style.display = 'block';
 
-    // ƒ_ƒEƒ“ƒ[ƒh‚·‚éê‡
+    // ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹å ´åˆ
     const a = document.createElement('a');
     a.href = image.src;
     a.download = 'capture.png';
