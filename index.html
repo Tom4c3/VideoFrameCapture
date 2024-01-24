@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8"> <!-- 文字化けを防ぐためにUTF-8エンコーディングを追加 -->
+    <meta charset="UTF-8">
     <link rel="icon" href="https://raw.githubusercontent.com/Tom4c3/simple-text-replacer/main/T2favicon.ico" type="image/x-icon">
     <title>VideoFrameCapture</title>
 
@@ -12,7 +12,7 @@
             border: 1px solid black;
         }
 
-        #capture {
+        #capture, #playVideo {
             margin-top: 10px;
         }
 
@@ -43,6 +43,7 @@
         <source src="" type="video/mp4">
         お使いのブラウザはvideoタグをサポートしていません。
     </video>
+    <button id="playVideo">ビデオを再生</button>
     <button id="capture">キャプチャ</button>
     <input type="text" id="filename" placeholder="ファイル名を入力" value="capture.png">
     <canvas id="canvas"></canvas>
@@ -52,8 +53,6 @@
     <script>
         document.getElementById('capture').addEventListener('click', function () {
             const video = document.getElementById('video');
-
-            // ビデオが準備完了しているかどうかを確認する
             if (video.readyState === 4) {
                 const canvas = document.getElementById('canvas');
                 canvas.width = video.videoWidth; // ビデオの幅に合わせる
@@ -76,6 +75,16 @@
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+            } else {
+                alert('先にビデオを選択してください。');
+            }
+        });
+
+        // ビデオ再生ボタンのイベントリスナー
+        document.getElementById('playVideo').addEventListener('click', function () {
+            const video = document.getElementById('video');
+            if (video.src) {
+                video.play(); // ビデオを再生
             } else {
                 alert('先にビデオを選択してください。');
             }
